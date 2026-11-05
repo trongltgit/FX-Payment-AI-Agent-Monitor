@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi nhánh</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/agentmon.css">
+</head>
+<body>
+  <div class="container wide">
+    <header class="bar">
+      <div>
+        <h1>Chi nhánh {% if is_admin %}(Admin){% endif %}</h1>
+        <p class="muted">Xin chào, {{ user_name }} · Chỉ thấy <strong>final + margin CN + TGDH</strong> (nếu chọn NSDH)</p>
+      </div>
+      <button class="secondary" onclick="logout()">Đăng xuất</button>
+    </header>
+
+    <nav class="tabs" id="am-tabs"></nav>
+    <div class="tab-panel" id="tab-main">
+
+    <section class="card">
+      <h2>1. Chi nhánh &amp; CIF</h2>
+      <label class="muted">Chi nhánh</label>
+      <select id="branch-select" class="full-select"></select>
+      <label class="muted" style="margin-top:0.5rem;display:block">CIF (online = KH login + trade được)</label>
+      <select id="cif-select" class="full-select"></select>
+      <label style="display:flex;align-items:center;gap:0.5rem;margin-top:0.5rem">
+        <input type="checkbox" id="set-online" onchange="toggleOnline()"> Bật online cho CIF đang chọn
+      </label>
+      <p id="cif-msg" class="muted"></p>
+    </section>
+
+    <!-- Tab: Margin CN + NSDH -->
+    <section class="card">
+      <h2>2. Margin CN &amp; NSDH (ngân sách điều hòa)</h2>
+      <p class="hint">
+        Margin CN ≤ trần TSC. NSDH = điểm ± vào final → TGDH.
+        Chỉ khi <strong>chọn dùng NSDH</strong> mới ra giá TGDH; không chọn thì chỉ final.
+        Áp dụng online (KH trade) và offline (CN báo giá).
+      </p>
+      <label class="muted">CIF</label>
+      <select id="preset-cif" class="full-select"></select>
+      <div class="form-row" style="margin-top:0.5rem">
+        <select id="p-cur"><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>AUD</option><option>SGD</option></select>
+        <select id="p-side">
+          <option value="SELL">SELL – NH bán (KH mua)</option>
+          <option value="BUY">BUY – NH mua (KH bán)</option>
+        </select>
+        <input type="number" id="p-margin" value="5" min="0" step="0.1" title="Margin CN" placeholder="Margin CN">
+        <label style="display:flex;align-items:center;gap:0.3rem;white-space:nowrap">
+          <input type="checkbox" id="p-use-nsdh"> Dùng NSDH
+        </label>
+        <input type="number" id="p-nsdh" value="0" min="0" step="0.1" title="Điểm NSDH" placeholder="Điểm NSDH">
+        <button onclick="savePreset()">Lưu preset</button>
+      </div>
+      <p id="preset-msg" class="muted"></p>
+      <button onclick="loadPresets()" class="secondary">Xem preset đã lưu</button>
+      <div id="preset-list" class="result-box"></div>
+    </section>
+
+    <!-- Báo giá 1 CIF -->
+    <section class="card">
+      <h2>3. Báo giá 1 CIF (offline / online)</h2>
+      <div class="form-row">
+        <select id="currency"><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>AUD</option><option>SGD</option></select>
+        <select id="side">
+          <option value="SELL">SELL – NH bán (KH mua)</option>
+          <option value="BUY">BUY – NH mua (KH bán)</option>
+        </select>
+        <input type="number" id="amount" value="100000" min="1">
+        <input type="number" id="margin" value="5" min="0" step="0.1" placeholder="Margin CN">
+        <label style="display:flex;align-items:center;gap:0.3rem;white-space:nowrap">
+          <input type="checkbox" id="q-use-nsdh"> NSDH
+        </label>
+        <input type="number" id="q-nsdh" value="0" min="0" step="0.1" placeholder="Điểm NSDH">
+        <button onclick="startQuote()">Theo dõi (30s)</button>
+        <button class="secondary" onclick="stopQuote()">Dừng</button>
+      </div>
+      <div id="quote-box" class="result-box">
+        <div class="price-line highlight"><span>Final price</span><strong id="final-px">—</strong></div>
+        <div class="price-line" id="tgdh-line" style="display:none"><span>TGDH (sau NSDH)</span><strong id="tgdh-px">—</strong></div>
+        <p class="muted small" id="quote-meta"></p>
+      </div>
+      <button onclick="executeTrade()" id="btn-exec" disabled style="margin-top:0.75rem">Đồng ý &amp; giao dịch</button>
+      <div id="trade-box" class="result-box"></div>
+    </section>
+
+    <!-- Multi CIF -->
+    <section class="card">
+      <h2>4. Multi CIF / nhiều ccy – báo giá KH</h2>
+      <p class="hint">Thêm không giới hạn dòng: cùng CIF khác ccy/side, hoặc khác CIF. Dùng để báo giá KH offline.</p>
+      <button onclick="addBatchRow()">+ Thêm dòng</button>
+      <button onclick="runBatchQuote()">Lấy giá tất cả</button>
+      <div id="batch-list" class="result-box" style="margin-top:0.5rem"></div>
+      <div id="batch-result" class="result-box"></div>
+    </section>
+
+    {% if is_admin %}
+    <section class="card">
+      <h2>5. Admin CN – Gán CIF cho nhân viên</h2>
+      <p class="hint">Mỗi nhân viên chỉ thấy / quản lý CIF được gán.</p>
+      <div class="form-row">
+        <input id="assign-staff" placeholder="staff01" value="staff01">
+        <input id="assign-cifs" placeholder="CUST001,CUST003" value="CUST001">
+        <button onclick="assignCif()">Gán CIF</button>
+      </div>
+      <p id="assign-msg" class="muted"></p>
+      <button class="secondary" onclick="loadStaff()">Danh sách nhân viên</button>
+      <div id="staff-box" class="result-box"></div>
+      <button class="secondary" onclick="loadCnLogs()" style="margin-top:0.5rem">Log chi nhánh</button>
+      <div id="cn-log-box" class="result-box"></div>
+    </section>
+    {% endif %}
+
+    <section class="card">
+      <h2>Lịch sử</h2>
+      <button onclick="loadHistory()">Tải lịch sử</button>
+      <div id="history-box" class="result-box"></div>
+    </section>
+    </div><!-- /tab-main -->
+    <div class="tab-panel" id="tab-regs"></div>
+    <div class="tab-panel" id="tab-limits"></div>
+    <div class="tab-panel" id="tab-queue"></div>
+    <div class="tab-panel" id="tab-mfx"></div>
+    <div class="tab-panel" id="tab-mpay"></div>
+    <div class="tab-panel" id="tab-acards"></div>
+    <div class="tab-panel" id="tab-profile"></div>
+    <div class="tab-panel" id="tab-lab"></div>
+  </div>
+  <script src="/static/js/antibot.js"></script>
+  <script src="/static/js/portal_cn.js"></script>
+  <script>
+    loadBranches();
+    renderBatch();
+  </script>
+  <script src="/static/js/agentmon.js"></script>
+  <script>
+    AM.start("{{ role }}", [
+      {id:"main",label:"Báo giá FX"},
+      {id:"regs",label:"Duyệt Agent",load:()=>AM.renderRegs()},
+      {id:"limits",label:"Hạn mức Agent",load:()=>AM.renderLimits()},
+      {id:"queue",label:"Hàng chờ duyệt",load:()=>AM.renderQueue()},
+      {id:"mfx",label:"Monitor FX",load:()=>AM.renderMonitor("FX","tab-mfx")},
+      {id:"mpay",label:"Monitor Thanh toán",load:()=>AM.renderMonitor("PAY","tab-mpay")},
+      {id:"acards",label:"Thẻ Visa/MC",load:()=>AM.renderAdminCards()},
+      {id:"profile",label:"Hồ sơ hành vi KH",load:()=>AM.renderProfile()},
+      {id:"lab",label:"Test Lab",load:()=>AM.renderLab("tab-lab")}], "main");
+  </script>
+</body>
+</html>

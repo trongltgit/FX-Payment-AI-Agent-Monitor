@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authenticator – Xác minh KYA</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/agentmon.css">
+</head>
+<body>
+  <div class="container narrow phone">
+    <header class="center">
+      <h1>Authenticator</h1>
+      <p class="subtitle">Xác minh giao dịch của AI Agent (KYA)</p>
+    </header>
+    <section class="card" id="pair-card">
+      <h2>Ghép thiết bị</h2>
+      <p class="hint">Trong cổng khách hàng → tab <b>Authenticator &amp; KYA</b> → bấm “Tạo mã ghép nối”, nhập mã 8 số và đặt PIN thiết bị.</p>
+      <div class="form-col">
+        <label>Mã ghép nối (8 số)</label><input id="pc" inputmode="numeric" maxlength="8" autocomplete="off">
+        <label>Đặt PIN thiết bị (4–8 số)</label><input id="pp" type="password" inputmode="numeric" maxlength="8" autocomplete="off">
+        <button class="full" onclick="pair()">Ghép thiết bị</button>
+        <p id="pm" class="error-text"></p>
+      </div>
+    </section>
+    <section id="main" style="display:none">
+      <div class="bar"><div><b id="who"></b><div class="muted small" id="dev"></div></div><button class="secondary" onclick="unlink()">Gỡ</button></div>
+      <p class="muted small">Tự cập nhật mỗi 3 giây.</p>
+      <div id="list"></div>
+    </section>
+  </div>
+  <script src="/static/js/authenticator.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – Anti-Bot Pro</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Dashboard Giao dịch</h1>
+      <p>Xin chào, <strong>{{ user_name }}</strong> ({{ role }})</p>
+      <p>CIF hiện tại: <code>{{ customer_id or 'Chưa chọn' }}</code> / {{ cif or '-' }}</p>
+      <a href="/">← Về trang chính</a>
+    </header>
+    <section class="card">
+      <p>Sử dụng trang chính để lấy giá và thực hiện giao dịch.</p>
+      <p>Tất cả request nhạy cảm đều qua Anti-Bot (Fingerprint + HMAC + Rate limit + Auth).</p>
+    </section>
+  </div>
+  <script src="/static/js/antibot.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khách hàng</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/agentmon.css">
+</head>
+<body>
+  <div class="container wide">
+    <header class="bar">
+      <div><h1>Xin chào, {{ user_name }}</h1><p class="muted">Giao dịch online</p></div>
+      <button class="secondary" onclick="logout()">Đăng xuất</button>
+    </header>
+
+    <nav class="tabs" id="am-tabs"></nav>
+    <div class="tab-panel" id="tab-main">
+
+    <section class="card">
+      <h2>Yêu cầu giá</h2>
+      <p class="hint">Giá theo cấu hình chi nhánh. Giá bạn <strong>bán</strong> luôn thấp hơn giá bạn <strong>mua</strong> (cùng thời điểm).</p>
+      <div class="form-col">
+        <label>Loại tiền</label>
+        <select id="currency"><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>AUD</option><option>SGD</option></select>
+        <label>Mua / Bán (chiều của bạn)</label>
+        <select id="side">
+          <option value="BUY">Mua (bạn mua ngoại tệ)</option>
+          <option value="SELL">Bán (bạn bán ngoại tệ)</option>
+        </select>
+        <label>Số tiền</label>
+        <input type="number" id="amount" value="100000" min="1">
+        <button class="full" onclick="getQuote()">Xem giá</button>
+      </div>
+      <p id="msg" class="muted"></p>
+    </section>
+
+    <section class="card price-card" id="price-card" style="display:none">
+      <p class="label">Giá của bạn</p>
+      <p class="big-price" id="final-price">—</p>
+      <p class="muted" id="price-meta"></p>
+      <button class="full" id="btn-accept" onclick="executeTrade()">Chấp nhận giao dịch</button>
+      <p id="trade-msg" class="muted"></p>
+    </section>
+
+    <section class="card">
+      <h2>Lịch sử giao dịch</h2>
+      <button onclick="loadHistory()">Tải lịch sử</button>
+      <div id="history-box" class="result-box"></div>
+    </section>
+    </div><!-- /tab-main -->
+    <div class="tab-panel" id="tab-agents"></div>
+    <div class="tab-panel" id="tab-auth"></div>
+    <div class="tab-panel" id="tab-cards"></div>
+    <div class="tab-panel" id="tab-mfx"></div>
+    <div class="tab-panel" id="tab-mpay"></div>
+    <div class="tab-panel" id="tab-lab"></div>
+  </div>
+  <script src="/static/js/antibot.js"></script>
+  <script src="/static/js/portal_kh.js"></script>
+  <script src="/static/js/agentmon.js"></script>
+  <script>
+    AM.start("CUSTOMER", [
+      {id:"main",label:"Giao dịch FX"},
+      {id:"agents",label:"AI Agent của tôi",load:()=>AM.renderMyAgents()},
+      {id:"auth",label:"Authenticator & KYA",load:()=>AM.renderAuth()},
+      {id:"cards",label:"Thẻ & Người nhận",load:()=>AM.renderCards()},
+      {id:"mfx",label:"Monitor FX",load:()=>AM.renderMonitor("FX","tab-mfx")},
+      {id:"mpay",label:"Monitor Thanh toán",load:()=>AM.renderMonitor("PAY","tab-mpay")},
+      {id:"lab",label:"Test Lab",load:()=>AM.renderLab("tab-lab")}], "main");
+  </script>
+</body>
+</html>

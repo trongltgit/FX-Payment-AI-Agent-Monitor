@@ -175,7 +175,7 @@ def train(domain, n_personas=45, per=170, seed=7):
     cols = F.COLS[domain]
     X = np.array([[r[0][c] for c in cols] for r in rows])
     y = np.array([r[1] for r in rows])
-    model = IsolationForest(n_estimators=250, contamination=0.08, random_state=seed, n_jobs=1, max_samples=0.8)
+    model = IsolationForest(n_estimators=150, contamination=0.08, random_state=seed, n_jobs=1, max_samples=256)   # 256 mẫu/cây là chuẩn của Isolation Forest, file nhỏ
     model.fit(X)
     raw = -model.score_samples(X)
     p50, p995 = float(np.percentile(raw, 50)), float(np.percentile(raw, 99.5))
@@ -185,7 +185,7 @@ def train(domain, n_personas=45, per=170, seed=7):
             "detected_injected_pct": round(100 * tp / max(int(y.sum()), 1), 1),
             "flagged_normal_pct": round(100 * int((pred & (y == 0)).sum()) / max(int((y == 0).sum()), 1), 1),
             "features": cols, "p50": p50, "p995": p995, "seconds": round(time.time() - t, 1)}
-    joblib.dump({"model": model, "cols": cols, "p50": p50, "p995": p995, "info": info}, model_path(domain))
+    joblib.dump({"model": model, "cols": cols, "p50": p50, "p995": p995, "info": info}, model_path(domain), compress=3)
     with _lock:
         _cache.pop(domain, None)
     LAST_TRAIN[domain] = info

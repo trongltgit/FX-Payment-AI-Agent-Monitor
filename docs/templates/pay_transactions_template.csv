@@ -1,0 +1,4 @@
+txn_id,customer_id,ts,domain,kind,amount_vnd,channel_type,beneficiary_account,merchant_id,mcc,country,three_ds,device_id,segment,balance_vnd,fraud_label,label_source
+T0001,C001,2026-01-05T09:12:00+07:00,PAY,TRANSFER,3000000,,1234567890,,,,,,STANDARD,120000000,0,
+T0002,C001,2026-01-06T20:40:00+07:00,PAY,ATM_WITHDRAWAL,2000000,ATM,,ATM0101,6011,VN,,,STANDARD,118000000,0,
+T0003,C002,2026-01-07T02:15:00+07:00,PAY,WALLET_PAYMENT,4500000,WALLET,,M777,5732,VN,,DEV-ABC123,VIP,900000000,1,chargeback

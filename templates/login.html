@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập – {{ portal_title }}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="container narrow">
+    <header class="center">
+      <h1>{{ portal_title }}</h1>
+      <p class="subtitle">{{ portal_desc }}</p>
+    </header>
+
+    <section class="card">
+      <div class="form-col">
+        <label>Tên đăng nhập</label>
+        <input type="text" id="username" value="{{ default_user }}" autocomplete="username">
+        <label>Mật khẩu</label>
+        <input type="password" id="password" {% if environment == 'demo' %}value="demo123"{% endif %} autocomplete="current-password">
+                <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+          <label>Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <div id="otp-row" style="display:none">
+          <label>Mã OTP (6 số)</label>
+          <input type="text" id="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+        </div>
+        {% if turnstile_site_key %}<div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}"></div>{% endif %}
+        <button class="full" onclick="doLogin()">Đăng nhập</button>
+        <p id="login-error" class="error-text"></p>
+      </div>
+    </section>
+
+    <p class="center"><a href="/">← Chọn cổng khác</a></p>
+    <a href="/api/internal/rates-export" style="position:absolute;left:-9999px" tabindex="-1" aria-hidden="true" rel="nofollow">export</a>
+  </div>
+  <script src="/static/js/antibot.js"></script>
+  <script>window.LOGIN_CFG = {formToken: {{ form_token|tojson }}, turnstile: {{ 'true' if turnstile_site_key else 'false' }}, expectedRoles: {{ expected_role.split(",")|tojson }}, redirect: {{ redirect_url|tojson }}};</script>
+  {% if turnstile_site_key %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
+  <script src="/static/js/login.js"></script>
+</body>
+</html>

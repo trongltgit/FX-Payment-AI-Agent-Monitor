@@ -1,0 +1,207 @@
+{
+ "FX": {
+  "current": "fx-iforest-20261114-61de7076",
+  "history": [
+   {
+    "version": "fx-iforest-20261114-61de7076",
+    "trained_at": 1794630098,
+    "code_version": "2.1.0",
+    "n_samples": 9034,
+    "n_anomaly_injected": 1935,
+    "data_source": "synthetic(seed=7,personas=45,per=170)",
+    "cols_hash": "c003061e",
+    "params": {
+     "n_estimators": 150,
+     "contamination": 0.08,
+     "max_samples": 256
+    },
+    "sha256": "442db25d3fd023ce51da6a9d7244b65a72a91f75fa153746fe5cef453464ac64",
+    "size_bytes": 368950,
+    "file": "iforest_fx.joblib",
+    "insample": {
+     "detected_injected_pct": 30.3,
+     "flagged_normal_pct": 1.9
+    },
+    "holdout": {
+     "n": 2940,
+     "n_positive": 559,
+     "positive_rate": 0.1901,
+     "auc_ml_only": 0.8802,
+     "auc_final": 0.8759,
+     "ap_final": 0.7501,
+     "KYA_or_above": {
+      "threshold": 0.35,
+      "alert_rate": 0.0925,
+      "recall": 0.3739,
+      "precision": 0.7684,
+      "false_positive_rate": 0.0265
+     },
+     "REVIEW_or_above": {
+      "threshold": 0.65,
+      "alert_rate": 0.0126,
+      "recall": 0.0662,
+      "precision": 1.0,
+      "false_positive_rate": 0.0
+     },
+     "BLOCK": {
+      "threshold": 0.85,
+      "alert_rate": 0.0027,
+      "recall": 0.0143,
+      "precision": 1.0,
+      "false_positive_rate": 0.0
+     },
+     "kya_false_positive_by_trigger": {
+      "DORMANT_WAKE": 27,
+      "FIRST_ONLINE": 21,
+      "AMOUNT_OVER_KYA": 9
+     }
+    }
+   }
+  ]
+ },
+ "GBM_FX": {
+  "current": "gbm-fx-20261114-5af9c2db",
+  "history": [
+   {
+    "version": "gbm-fx-20261114-5af9c2db",
+    "trained_at": 1794630103,
+    "code_version": "2.1.0",
+    "n_samples": 9034,
+    "data_source": "synthetic(seed=7)",
+    "sha256": "f565a323103bc6e20e36c31cad6fe7c1a65d57f26a419e79b0410f20b0e09b80",
+    "size_bytes": 85632,
+    "file": "gbm_fx.joblib",
+    "holdout": {
+     "n": 2940,
+     "positive_rate": 0.19,
+     "auc": 0.9396,
+     "ap": 0.9214,
+     "at_0.85": {
+      "alert_rate": 0.1548,
+      "recall": 0.814,
+      "precision": 1.0,
+      "false_positive_rate": 0.0
+     }
+    }
+   }
+  ]
+ },
+ "PAY": {
+  "current": "pay-iforest-20261114-543a7e62",
+  "history": [
+   {
+    "version": "pay-iforest-20261114-543a7e62",
+    "trained_at": 1794630106,
+    "code_version": "2.1.0",
+    "n_samples": 8827,
+    "n_anomaly_injected": 1746,
+    "data_source": "synthetic(seed=7,personas=45,per=170)",
+    "cols_hash": "08a7dd6b",
+    "params": {
+     "n_estimators": 150,
+     "contamination": 0.08,
+     "max_samples": 256
+    },
+    "sha256": "0cd34750eda4d353831820322825187adc8e3337d55c7dd7ae6b23bc5ea4e0ce",
+    "size_bytes": 382957,
+    "file": "iforest_pay.joblib",
+    "insample": {
+     "detected_injected_pct": 35.2,
+     "flagged_normal_pct": 1.3
+    },
+    "holdout": {
+     "n": 3013,
+     "n_positive": 660,
+     "positive_rate": 0.2191,
+     "auc_ml_only": 0.9418,
+     "auc_final": 0.9578,
+     "ap_final": 0.8889,
+     "KYA_or_above": {
+      "threshold": 0.35,
+      "alert_rate": 0.2841,
+      "recall": 0.8167,
+      "precision": 0.6297,
+      "false_positive_rate": 0.1347
+     },
+     "REVIEW_or_above": {
+      "threshold": 0.65,
+      "alert_rate": 0.0348,
+      "recall": 0.1591,
+      "precision": 1.0,
+      "false_positive_rate": 0.0
+     },
+     "BLOCK": {
+      "threshold": 0.85,
+      "alert_rate": 0.0116,
+      "recall": 0.053,
+      "precision": 1.0,
+      "false_positive_rate": 0.0
+     },
+     "kya_false_positive_by_trigger": {
+      "NEW_BENEFICIARY": 117,
+      "AMOUNT_OVER_KYA": 89,
+      "DORMANT_WAKE": 36,
+      "NEW_DEVICE": 33,
+      "FIRST_ONLINE": 16,
+      "AGENT_CASH_OUT": 13,
+      "NEW_COUNTRY": 4,
+      "ATM_FOREIGN": 1
+     }
+    }
+   }
+  ]
+ },
+ "GBM_PAY": {
+  "current": "gbm-pay-20261114-babe4756",
+  "history": [
+   {
+    "version": "gbm-pay-20261114-babe4756",
+    "trained_at": 1794630112,
+    "code_version": "2.1.0",
+    "n_samples": 8827,
+    "data_source": "synthetic(seed=7)",
+    "sha256": "0c12b25e825416fbcf2ef7fa97d96dc1147eadb9131c4288f0d3bdd468451a7b",
+    "size_bytes": 71542,
+    "file": "gbm_pay.joblib",
+    "holdout": {
+     "n": 3013,
+     "positive_rate": 0.219,
+     "auc": 0.9971,
+     "ap": 0.9957,
+     "at_0.85": {
+      "alert_rate": 0.2071,
+      "recall": 0.9455,
+      "precision": 1.0,
+      "false_positive_rate": 0.0
+     }
+    }
+   }
+  ]
+ },
+ "BOT": {
+  "current": "bot-hgb-20261114-d33ef4f8",
+  "history": [
+   {
+    "version": "bot-hgb-20261114-d33ef4f8",
+    "trained_at": 1794630112,
+    "code_version": "2.1.0",
+    "n_samples": 7000,
+    "data_source": "synthetic(seed=7)",
+    "sha256": "cb851d81ba028de6692593118716d889d0bb02cfc9896dbc2306d125dc495ae1",
+    "size_bytes": 99070,
+    "file": "botmodel.joblib",
+    "holdout": {
+     "n": 3000,
+     "bot_rate": 0.436,
+     "auc": 0.9914,
+     "ap": 0.9896,
+     "recall_at_fpr_1pct": 0.857,
+     "flag_at_0.85": {
+      "bot_recall": 0.831,
+      "human_flagged": 0.0059
+     }
+    }
+   }
+  ]
+ }
+}
